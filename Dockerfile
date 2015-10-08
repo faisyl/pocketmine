@@ -10,7 +10,7 @@ RUN apt-get -y install python3-yaml wget
 
 #Create the home folder, set the permissions
 RUN mkdir /pocketmine
-#RUN mkdir /pocketmine-data
+RUN mkdir /pocketmine-data
 
 RUN cd /pocketmine && curl -sL http://get.pocketmine.net/ | bash -s - -r -v development
 RUN mv /pocketmine/PocketMine-MP.phar /pocketmine/PocketMine-MP-orig.phar
@@ -21,15 +21,16 @@ COPY source/eula.txt /pocketmine/eula.txt
 
 # Change user to pocketmine
 RUN chown -R pocketmine:100 /pocketmine
-#RUN chown -R pocketmine:100 /pocketmine-data
+RUN chown -R pocketmine:100 /pocketmine-data
 
 USER pocketmine
 
 VOLUME /pocketmine
+VOLUME /pocketmine-data
 WORKDIR /pocketmine
 
 #Expose the port from the container
 EXPOSE 19132
 
-CMD ["./start.sh", "--no-wizard", "--enable-rcon=on", "--data-path=/pocketmine"]
+CMD ["./start.sh", "--no-wizard", "--enable-rcon=on", "--data-path=/pocketmine-data"]
 #CMD ["/pocketmine/bin/php5/bin/php", "/pocketmine/PocketMine-MP-new.phar"]
